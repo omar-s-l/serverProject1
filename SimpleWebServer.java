@@ -5,11 +5,12 @@ import java.util.Map;
 
 // Attributions: Several of these methods were taken from instructor solutions to Project0
 public class SimpleWebServer {
-	private final int serverNumber;
+	private final int serverPort;
 	private ServerSocket socket;
+	private DataOutputStream toClientStream;
 	private BufferedReader fromClientStream;
 
-	public Server(int serverPort) {
+	public SimpleWebServer(int serverPort) {
 		this.serverPort = serverPort;
 	}
 
@@ -29,14 +30,33 @@ public class SimpleWebServer {
 			System.out.println("Probably an invalid port number. " + e);
 			return false;
 		}
+
+		toClientStream = new DataOutputStream(clientSocket.getOutputStream());
+		fromClientStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		System.out.print("Input and output streams created for client.\n");
+		return true;
 	}
 
-
+	public void processGetRequest() throws IOException {
+		String str = ".";
+		while (!str.equals("")) {
+			str = fromClientStream.readLine();
+			System.out.println(str);
+		}
+	}
 
 	public static void main(String[] args) throws IOException {
-		Map<String, String> flags = Utils.parseCmdlineFlags(argv);
-		if (!flags.containsKey("00serverPort")) {
+		Map<String, String> flags = Utils.parseCmdlineFlags(args);
+		if (!flags.containsKey("--serverPort")) {
 			System.out.println("usage: Server --serverPort=12345");
+			System.exit(-1);
+		}
+
+		int serverPort = -1;
+		try {
+			serverPort = Integer.parseInt(flags.get("--serverPort"));
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid port number! Must be an integer.");
 			System.exit(-1);
 		}
 
@@ -44,13 +64,12 @@ public class SimpleWebServer {
 		try {
 			webServer.start();
 			if (webServer.acceptFromClient()) {
-				// do stuff
+				webServer.processGetRequest();
 			} else {
 				System.out.println("Error accepting client communication.");
 			}
 		} catch (IOException e) {
 			System.out.println("Error communicating with client. Aborting. Details: " + e);
-		}
 		}
 	}
 }
