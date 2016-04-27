@@ -31,9 +31,26 @@ public class SimpleWebServer {
 		}
 	}
 
-	
+
 
 	public static void main(String[] args) throws IOException {
-		portNumber = Integer.parseInt(args[0].substring(7));
+		Map<String, String> flags = Utils.parseCmdlineFlags(argv);
+		if (!flags.containsKey("00serverPort")) {
+			System.out.println("usage: Server --serverPort=12345");
+			System.exit(-1);
+		}
+
+		SimpleWebServer webServer = new SimpleWebServer(serverPort);
+		try {
+			webServer.start();
+			if (webServer.acceptFromClient()) {
+				// do stuff
+			} else {
+				System.out.println("Error accepting client communication.");
+			}
+		} catch (IOException e) {
+			System.out.println("Error communicating with client. Aborting. Details: " + e);
+		}
+		}
 	}
 }
