@@ -39,18 +39,25 @@ public class SimpleWebServer {
 	}
 
 	public void processGetRequest() throws IOException {
-		ArrayList<String> words = new ArrayList<String>();
+		ArrayList<ArrayList<String>> lines = new ArrayList<ArrayList<String>>();
 		String str = ".";
 		while (!str.equals("")) {
 			str = fromClientStream.readLine();
 
+			// Separate parts of the response by white space
 			String[] split = str.split("\\s+");
-
+			ArrayList<String> wordsOnLine = new ArrayList<String>();
 			for (String s : split) {
-				System.out.println(s);
+				wordsOnLine.add(s);
 			}
 
-//			System.out.println(str);
+			lines.add(wordsOnLine);
+			//System.out.println(str);
+		}
+
+		// Print out all of the lines (for testing)
+		for (ArrayList<String> s : lines) {
+			System.out.println(s);
 		}
 	}
 
