@@ -96,7 +96,7 @@ public class SimpleWebServer {
 					Request request = webServer.processGetRequest();
 					
 					// Use the request path to create a Response object
-					Response response = new Response(request.getPath());
+					Response response = new Response(request.getPath(), request.getMethod());
 
 					// Print out the response (for debugging)
 					System.out.println(response);

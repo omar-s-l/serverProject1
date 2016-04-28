@@ -19,21 +19,23 @@ public class Response {
 	//OMAR's TODO TRY/CATCH ERRORSTATUS METHOD SIGNATURE 
 
 
-	public Response(String path) throws FileNotFoundException {
+	public Response(String path, String method) throws FileNotFoundException {
 		this.path = path;
-		// this.fileStr = getFileStr();
-		try {
+		contentType = "text/plain";
 
-		// http://stackoverflow.com/questions/858980/file-to-byte-in-java
-		Path nioPath = Paths.get(path);
-		this.file = Files.readAllBytes(nioPath);
-		this.contentType = interpretContentType();
+		if (method.equalsIgnoreCase("GET")) {
+			try {
+				// Read the file into a byte stream
+				// http://stackoverflow.com/questions/858980/file-to-byte-in-java
+				Path nioPath = Paths.get(path);
+				this.file = Files.readAllBytes(nioPath);
+				this.contentType = interpretContentType();
 
-		} catch FileNotFoundException e {
-			System.out.println("The requested file was not found" + e);
-			error = 404;
+			} catch FileNotFoundException e {
+				System.out.println("The requested file was not found" + e);
+				error = 404;
+			}	
 		}
-
 		
 		// Format the date appropriately
 		// http://stackoverflow.com/questions/7707555/getting-date-in-http-format-in-java
@@ -44,43 +46,41 @@ public class Response {
 
 
 	public String interpretContentType() {
-		String contentType = "text/plain";
-
 		if (path.endsWith(".html"))
-			contentType = "text/html";
+			this.contentType = "text/html";
 		else if (path.endsWith(".txt"))
-			contentType = "text/plain";
+			this.contentType = "text/plain";
 		else if (path.endsWith(".pdf"))
-			contentType = "application/pdf";
+			this.contentType = "application/pdf";
 		else if (path.endsWith(".png"))
-			contentType = "image/png";
+			this.contentType = "image/png";
 		else if (path.endsWith(".jpg") || path.endsWith(".jpeg"))
-			contentType = "image/jpeg";
+			this.contentType = "image/jpeg";
 
 		return contentType;
 	}
 
-	public String getFileStr() throws IOException {
-		String fileStr  = "";
+	// public String getFileStr() throws IOException {
+	// 	String fileStr  = "";
 
-		try {
-			// http://stackoverflow.com/questions/23003142/java-read-file-and-send-in-the-server
-			BufferedReader input =  new BufferedReader(new FileReader(path));
-	 		String line = null;
-	 		while ((line = input.readLine()) != null) {
-	      		fileStr += line + "\r\n";
-	      	error = 200;
-	  		}
-		} catch (FileNotFoundException e) {
-			System.out.println("Exception: " + e);
-		}
+	// 	try {
+	// 		// http://stackoverflow.com/questions/23003142/java-read-file-and-send-in-the-server
+	// 		BufferedReader input =  new BufferedReader(new FileReader(path));
+	//  		String line = null;
+	//  		while ((line = input.readLine()) != null) {
+	//       		fileStr += line + "\r\n";
+	//       	error = 200;
+	//   		}
+	// 	} catch (FileNotFoundException e) {
+	// 		System.out.println("Exception: " + e);
+	// 	}
 		
-		return fileStr;
-	}
+	// 	return fileStr;
+	// }
 
-	public byte[] getFile() {
-		return file;
-	}
+	// public byte[] getFile() {
+	// 	return file;
+	// }
 
 	public String toString() {
 		String str = "";
@@ -88,8 +88,7 @@ public class Response {
 		str += protocol + " " + error + " OK\r\n";
 		str += "Content-Type: " + contentType + "\r\n";
 		str += "Date: " + date + "\r\n\r\n";
-		//str += fileStr;
-
+		
 		return str;
 	}
 }
