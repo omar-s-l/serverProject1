@@ -1,16 +1,21 @@
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
+import java.text.SimpleDateFormat;
 
 public class Response {
 	private String protocol = "HTTP/1.1";
 	private int error;
 	private String contentType;
-	private Date date;
+	private String date;
+	private SimpleDateFormat dateFormat;
 
 	public Response(int error, String contentType) {
 		this.error = error;
 		this.contentType = contentType;
-		this.date = Calendar.getInstance().getTime();
+
+		// http://stackoverflow.com/questions/7707555/getting-date-in-http-format-in-java
+		dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+		this.date = dateFormat.format(Calendar.getInstance().getTime());
 	}
 
 	public String toString() {
