@@ -88,7 +88,8 @@ public class SimpleWebServer {
 				// This is where most of the work happens
 				Request request = webServer.processGetRequest();
 				System.out.println(request.getMethod());
-
+				Response response = new Response(200, ".txt.");
+				System.out.println(response);
 
 			} else {
 				System.out.println("Error accepting client communication.");
