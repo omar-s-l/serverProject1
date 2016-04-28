@@ -15,11 +15,13 @@ public class SimpleWebServer {
 		this.serverPort = serverPort;
 	}
 
+	// Binds the server to the specified port
 	public void start() throws IOException {
 		socket = new ServerSocket(serverPort);
 		System.out.println("Server bound and listening to port " + serverPort);
 	}
 
+	// Accepts the client socket and starts the I/O streams
 	public boolean acceptFromClient() throws IOException {
 		Socket clientSocket;
 		try {
@@ -32,9 +34,9 @@ public class SimpleWebServer {
 			return false;
 		}
 
+		// Create the I/O streams
 		toClientStream = new DataOutputStream(clientSocket.getOutputStream());
 		fromClientStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-		System.out.print("Input and output streams created for client.\n");
 		return true;
 	}
 
@@ -90,16 +92,20 @@ public class SimpleWebServer {
 			while (true) {
 				if (webServer.acceptFromClient()) {
 
-					// This is where most of the work happens
-
 					// Process the request and create a Request object
 					Request request = webServer.processGetRequest();
 					
 					// Use the request path to create a Response object
 					Response response = new Response(request.getPath());
+
+					// Print out the response (for debugging)
 					System.out.println(response);
+
+					// Write the response and the file to the client
 					webServer.toClientStream.writeBytes(response.toString());
 					webServer.toClientStream.write(response.getFile(), 0, response.getFile().length);
+					
+					// Close the I/O streams
 					webServer.fromClientStream.close();
 					webServer.toClientStream.close();
 
