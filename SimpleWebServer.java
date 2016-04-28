@@ -46,13 +46,12 @@ public class SimpleWebServer {
 
 			// Separate parts of the response by white space
 			String[] split = str.split("\\s+");
-			ArrayList<String> wordsOnLine = new ArrayList<String>();
+			ArrayList<String> wordsInLine = new ArrayList<String>();
 			for (String s : split) {
-				wordsOnLine.add(s);
+				wordsInLine.add(s);
 			}
 
-			lines.add(wordsOnLine);
-			//System.out.println(str);
+			lines.add(wordsInLine);
 		}
 
 		// Print out all of the lines (for testing)

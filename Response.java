@@ -10,7 +10,6 @@ public class Response {
 	public Response(int error, String contentType) {
 		this.error = error;
 		this.contentType = contentType;
-
 		this.date = Calendar.getInstance().getTime();
 	}
 
