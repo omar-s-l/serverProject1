@@ -21,7 +21,7 @@ public class Response {
 
 	public Response(String path, String method) throws FileNotFoundException {
 		this.path = path;
-		contentType = "text/plain";
+		contentType = "text/html";
 
 		if (method.equalsIgnoreCase("GET")) {
 			try {
