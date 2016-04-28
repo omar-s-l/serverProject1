@@ -36,7 +36,7 @@ public class Response {
 
 		str += protocol + " " + error + " OK\r\n";
 		str += "Content-Type: " + contentType + "\r\n";
-		str += "Date: " + date;
+		str += "Date: " + date + "\r\n\r\n";
 
 		return str;
 	}

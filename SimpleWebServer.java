@@ -81,22 +81,25 @@ public class SimpleWebServer {
 		}
 
 		SimpleWebServer webServer = new SimpleWebServer(serverPort);
-		try {
-			webServer.start();
-			if (webServer.acceptFromClient()) {
+		
+		//while (true) {
+			try {
+				webServer.start();
+				if (webServer.acceptFromClient()) {
 
-				// This is where most of the work happens
-				Request request = webServer.processGetRequest();
-				System.out.println(request.getMethod());
-				Response response = new Response(200, ".txt.");
-				System.out.println(response);
-				toClientStream.writeBytes(response.toString());
+					// This is where most of the work happens
+					Request request = webServer.processGetRequest();
+					System.out.println(request.getMethod());
+					Response response = new Response(200, ".txt.");
+					System.out.println(response);
+					webServer.toClientStream.writeBytes(response.toString());
 
-			} else {
-				System.out.println("Error accepting client communication.");
+				} else {
+					System.out.println("Error accepting client communication.");
+				}
+			} catch (IOException e) {
+				System.out.println("Error communicating with client. Aborting. Details: " + e);
 			}
-		} catch (IOException e) {
-			System.out.println("Error communicating with client. Aborting. Details: " + e);
-		}
+		//}
 	}
 }
