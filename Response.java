@@ -19,15 +19,21 @@ public class Response {
 	//OMAR's TODO TRY/CATCH ERRORSTATUS METHOD SIGNATURE 
 
 
-	public Response(String path) throws IOException {
+	public Response(String path) throws FileNotFoundException {
 		this.path = path;
-		this.fileStr = getFileStr();
+		// this.fileStr = getFileStr();
+		try {
 
 		// http://stackoverflow.com/questions/858980/file-to-byte-in-java
 		Path nioPath = Paths.get(path);
 		this.file = Files.readAllBytes(nioPath);
-
 		this.contentType = interpretContentType();
+
+		} catch FileNotFoundException e {
+			System.out.println("The requested file was not found" + e);
+			error = 404;
+		}
+
 		
 		// Format the date appropriately
 		// http://stackoverflow.com/questions/7707555/getting-date-in-http-format-in-java
@@ -63,12 +69,12 @@ public class Response {
 	 		String line = null;
 	 		while ((line = input.readLine()) != null) {
 	      		fileStr += line + "\r\n";
+	      	error = 200;
 	  		}
 		} catch (FileNotFoundException e) {
 			System.out.println("Exception: " + e);
 		}
 		
-
 		return fileStr;
 	}
 
