@@ -79,10 +79,9 @@ public class SimpleWebServer {
 			System.out.println("Invalid port number! Must be an integer.");
 			System.exit(-1);
 		}
-
+		while (true) {
 		SimpleWebServer webServer = new SimpleWebServer(serverPort);
 		
-		//while (true) {
 			try {
 				webServer.start();
 				if (webServer.acceptFromClient()) {
