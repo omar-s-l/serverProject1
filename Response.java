@@ -1,5 +1,8 @@
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.*;
 import java.text.SimpleDateFormat;
 
@@ -11,10 +14,16 @@ public class Response {
 	private SimpleDateFormat dateFormat;
 	private String path;
 	private String fileStr;
+	private byte[] file;
 
 	public Response(String path) throws IOException {
 		this.path = path;
-		this.fileStr = getFile();
+		this.fileStr = getFileStr();
+
+		// http://stackoverflow.com/questions/858980/file-to-byte-in-java
+		Path nioPath = Paths.get(path);
+		this.file = Files.readAllBytes(nioPath);
+
 		this.contentType = interpretContentType();
 		
 		// Format the date appropriately
@@ -42,7 +51,7 @@ public class Response {
 		return contentType;
 	}
 
-	public String getFile() throws IOException {
+	public String getFileStr() throws IOException {
 		String fileStr  = "";
 
 		try {
@@ -60,13 +69,17 @@ public class Response {
 		return fileStr;
 	}
 
+	public byte[] getFile() {
+		return file;
+	}
+
 	public String toString() {
 		String str = "";
 
 		str += protocol + " " + error + " OK\r\n";
 		str += "Content-Type: " + contentType + "\r\n";
 		str += "Date: " + date + "\r\n\r\n";
-		str += fileStr;
+		//str += fileStr;
 
 		return str;
 	}

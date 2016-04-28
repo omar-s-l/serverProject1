@@ -95,6 +95,7 @@ public class SimpleWebServer {
 					//Response response = new Response("www/foo/bar.html");
 					System.out.println(response);
 					webServer.toClientStream.writeBytes(response.toString());
+					webServer.toClientStream.write(response.getFile(), 0, response.getFile().length);
 
 				} else {
 					System.out.println("Error accepting client communication.");
