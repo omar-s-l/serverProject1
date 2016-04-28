@@ -82,16 +82,20 @@ public class SimpleWebServer {
 
 		SimpleWebServer webServer = new SimpleWebServer(serverPort);
 		
+		// Try to start the web server
 		try {
 			webServer.start();
 			
+			// Loop so that the server stay up
 			while (true) {
 				if (webServer.acceptFromClient()) {
 
 					// This is where most of the work happens
+
+					// Process the request and create a Request object
 					Request request = webServer.processGetRequest();
-					// System.out.println(request.getMethod());
-					// System.out.println(request.getPath());
+					
+					// Use the request path to create a Response object
 					Response response = new Response(request.getPath());
 					System.out.println(response);
 					webServer.toClientStream.writeBytes(response.toString());
