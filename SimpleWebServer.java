@@ -90,7 +90,7 @@ public class SimpleWebServer {
 					// This is where most of the work happens
 					Request request = webServer.processGetRequest();
 					System.out.println(request.getMethod());
-					Response response = new Response(200, ".txt.");
+					Response response = new Response(request.getPath());
 					System.out.println(response);
 					webServer.toClientStream.writeBytes(response.toString());
 
