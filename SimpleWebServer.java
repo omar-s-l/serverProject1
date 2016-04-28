@@ -59,7 +59,6 @@ public class SimpleWebServer {
 			System.out.println(s);
 		}
 
-
 		// Constructing the request object 
 		Request request = new Request(lines); 
 

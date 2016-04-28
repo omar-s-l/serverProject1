@@ -14,6 +14,7 @@ public class Request {
 		this.path = lines.get(0).get(1);
 	}
 
+<<<<<<< Updated upstream
 
 	public String getMethod(){
 		return this.method;
@@ -21,6 +22,13 @@ public class Request {
 
 
 	public String getPath(){
+=======
+	public String getMethod() {
+		return this.method;
+	}
+
+	public String getPath() {
+>>>>>>> Stashed changes
 		return this.path; 
 	}
 
