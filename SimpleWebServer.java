@@ -79,29 +79,32 @@ public class SimpleWebServer {
 			System.out.println("Invalid port number! Must be an integer.");
 			System.exit(-1);
 		}
-		while (true) {
+
 		SimpleWebServer webServer = new SimpleWebServer(serverPort);
 		
-			try {
-				webServer.start();
+		try {
+			webServer.start();
+			
+			while (true) {
 				if (webServer.acceptFromClient()) {
 
 					// This is where most of the work happens
 					Request request = webServer.processGetRequest();
-					System.out.println(request.getMethod());
-					System.out.println(request.getPath());
+					// System.out.println(request.getMethod());
+					// System.out.println(request.getPath());
 					Response response = new Response(request.getPath());
-					//Response response = new Response("www/foo/bar.html");
 					System.out.println(response);
 					webServer.toClientStream.writeBytes(response.toString());
 					webServer.toClientStream.write(response.getFile(), 0, response.getFile().length);
+					webServer.fromClientStream.close();
+					webServer.toClientStream.close();
 
 				} else {
 					System.out.println("Error accepting client communication.");
 				}
-			} catch (IOException e) {
-				System.out.println("Error communicating with client. Aborting. Details: " + e);
 			}
-		//}
+		} catch (IOException e) {
+			System.out.println("Error communicating with client. Aborting. Details: " + e);
+		}
 	}
 }
