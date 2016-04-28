@@ -90,6 +90,7 @@ public class SimpleWebServer {
 				System.out.println(request.getMethod());
 				Response response = new Response(200, ".txt.");
 				System.out.println(response);
+				toClientStream.writeBytes(response.toString());
 
 			} else {
 				System.out.println("Error accepting client communication.");
