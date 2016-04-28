@@ -38,7 +38,7 @@ public class SimpleWebServer {
 		return true;
 	}
 
-	public void processGetRequest() throws IOException {
+	public Request processGetRequest() throws IOException {
 		ArrayList<ArrayList<String>> lines = new ArrayList<ArrayList<String>>();
 		String str = ".";
 		while (!str.equals("")) {
@@ -58,6 +58,12 @@ public class SimpleWebServer {
 		for (ArrayList<String> s : lines) {
 			System.out.println(s);
 		}
+
+
+		// Constructing the request object 
+		Request request = new Request(lines); 
+
+		return request; 
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -81,7 +87,10 @@ public class SimpleWebServer {
 			if (webServer.acceptFromClient()) {
 
 				// This is where most of the work happens
-				webServer.processGetRequest();
+				Request request = webServer.processGetRequest();
+				System.out.println(request.getMethod());
+
+
 			} else {
 				System.out.println("Error accepting client communication.");
 			}
