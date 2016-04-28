@@ -16,6 +16,9 @@ public class Response {
 	private String fileStr;
 	private byte[] file;
 
+	//OMAR's TODO TRY/CATCH ERRORSTATUS METHOD SIGNATURE 
+
+
 	public Response(String path) throws IOException {
 		this.path = path;
 		this.fileStr = getFileStr();
