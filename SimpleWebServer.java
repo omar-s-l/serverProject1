@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,10 +39,18 @@ public class SimpleWebServer {
 	}
 
 	public void processGetRequest() throws IOException {
+		ArrayList<String> words = new ArrayList<String>();
 		String str = ".";
 		while (!str.equals("")) {
 			str = fromClientStream.readLine();
-			System.out.println(str);
+
+			String[] split = str.split("\\s+");
+
+			for (String s : split) {
+				System.out.println(s);
+			}
+
+//			System.out.println(str);
 		}
 	}
 
@@ -64,6 +73,8 @@ public class SimpleWebServer {
 		try {
 			webServer.start();
 			if (webServer.acceptFromClient()) {
+
+				// This is where most of the work happens
 				webServer.processGetRequest();
 			} else {
 				System.out.println("Error accepting client communication.");
