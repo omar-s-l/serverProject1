@@ -90,7 +90,9 @@ public class SimpleWebServer {
 					// This is where most of the work happens
 					Request request = webServer.processGetRequest();
 					System.out.println(request.getMethod());
+					System.out.println(request.getPath());
 					Response response = new Response(request.getPath());
+					//Response response = new Response("www/foo/bar.html");
 					System.out.println(response);
 					webServer.toClientStream.writeBytes(response.toString());
 

@@ -1,3 +1,5 @@
+import java.io.*;
+import java.net.*;
 import java.util.*;
 import java.text.SimpleDateFormat;
 
@@ -8,10 +10,14 @@ public class Response {
 	private String date;
 	private SimpleDateFormat dateFormat;
 	private String path;
+	private String fileStr;
 
-	public Response(String path) {
+	public Response(String path) throws IOException {
 		this.path = path;
-		this.contentType = interpretContentType(); 
+		this.fileStr = getFile();
+		this.contentType = interpretContentType();
+		
+		// Format the date appropriately
 		// http://stackoverflow.com/questions/7707555/getting-date-in-http-format-in-java
 		dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -36,12 +42,31 @@ public class Response {
 		return contentType;
 	}
 
+	public String getFile() throws IOException {
+		String fileStr  = "";
+
+		try {
+			// http://stackoverflow.com/questions/23003142/java-read-file-and-send-in-the-server
+			BufferedReader input =  new BufferedReader(new FileReader(path));
+	 		String line = null;
+	 		while ((line = input.readLine()) != null) {
+	      		fileStr += line + "\r\n";
+	  		}
+		} catch (FileNotFoundException e) {
+			System.out.println("Exception: " + e);
+		}
+		
+
+		return fileStr;
+	}
+
 	public String toString() {
 		String str = "";
 
 		str += protocol + " " + error + " OK\r\n";
 		str += "Content-Type: " + contentType + "\r\n";
 		str += "Date: " + date + "\r\n\r\n";
+		str += fileStr;
 
 		return str;
 	}
