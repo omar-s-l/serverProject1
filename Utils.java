@@ -19,4 +19,3 @@ final class Utils {
 		return flags;
 	}
 }
-

@@ -19,7 +19,7 @@ public class Response {
 	//OMAR's TODO TRY/CATCH ERRORSTATUS METHOD SIGNATURE 
 
 
-	public Response(String path, String method) throws FileNotFoundException {
+	public Response(String path, String method) throws IOException {
 		this.path = path;
 		contentType = "text/html";
 
@@ -31,7 +31,7 @@ public class Response {
 				this.file = Files.readAllBytes(nioPath);
 				this.contentType = interpretContentType();
 
-			} catch FileNotFoundException e {
+			} catch (FileNotFoundException e) {
 				System.out.println("The requested file was not found" + e);
 				error = 404;
 			}	
@@ -43,7 +43,10 @@ public class Response {
 		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 		this.date = dateFormat.format(Calendar.getInstance().getTime());
 	}
-
+	
+	public byte[] getFile() {
+		return file;
+	}
 
 	public String interpretContentType() {
 		if (path.endsWith(".html"))
@@ -76,10 +79,6 @@ public class Response {
 	// 	}
 		
 	// 	return fileStr;
-	// }
-
-	// public byte[] getFile() {
-	// 	return file;
 	// }
 
 	public String toString() {
