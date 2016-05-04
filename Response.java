@@ -18,7 +18,6 @@ public class Response {
 	// Date variables
 	private String date;
 	private SimpleDateFormat dateFormat;
-	
 
 	// Constructor
 	public Response(String path, String method) throws IOException {
