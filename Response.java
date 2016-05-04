@@ -13,11 +13,9 @@ public class Response {
 	private String date;
 	private SimpleDateFormat dateFormat;
 	private String path;
-	private String fileStr;
 	private byte[] file;
 
 	//OMAR's TODO TRY/CATCH ERRORSTATUS METHOD SIGNATURE 
-
 
 	public Response(String path, String method) throws IOException {
 		this.path = path;
@@ -28,8 +26,11 @@ public class Response {
 				// Read the file into a byte stream
 				// http://stackoverflow.com/questions/858980/file-to-byte-in-java
 				Path nioPath = Paths.get(path);
+				System.out.println(1);
 				this.file = Files.readAllBytes(nioPath);
+				System.out.println(2);
 				this.contentType = interpretContentType();
+				System.out.println(3);
 
 			} catch (FileNotFoundException e) {
 				System.out.println("The requested file was not found" + e);
@@ -62,24 +63,6 @@ public class Response {
 
 		return contentType;
 	}
-
-	// public String getFileStr() throws IOException {
-	// 	String fileStr  = "";
-
-	// 	try {
-	// 		// http://stackoverflow.com/questions/23003142/java-read-file-and-send-in-the-server
-	// 		BufferedReader input =  new BufferedReader(new FileReader(path));
-	//  		String line = null;
-	//  		while ((line = input.readLine()) != null) {
-	//       		fileStr += line + "\r\n";
-	//       	error = 200;
-	//   		}
-	// 	} catch (FileNotFoundException e) {
-	// 		System.out.println("Exception: " + e);
-	// 	}
-		
-	// 	return fileStr;
-	// }
 
 	public String toString() {
 		String str = "";
