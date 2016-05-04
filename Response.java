@@ -29,12 +29,23 @@ public class Response {
 
 		RedirectMap redirects = RedirectMap.getInstance();
 
-		if (path.endsWith("redirect.defs")) {
+		// If the client sends a POST request, throw a 403
+		if (method.equalsIgnoreCase("POST")) {
+			error = 403;
+
+		// If the client asks for the redirect.defs file, throw a 404
+		} else if (path.endsWith("redirect.defs")) {
 			error = 404;
+		
+		// If the client asks for a location that has been moved, throw a 301,
+		// search the map in the RedirectMap singleton for the key, and serve
+		// the client the value as the new location
 		} else if (redirects.getMap().containsKey(this.path)) {
-			System.out.println("I know how to redirect that!");
 			error = 301;
 			this.path = redirects.getMap().get(this.path);
+
+		// Otherwise, prepare the response object with the 200 header
+		// and the file info
 		} else {
 			this.path = "www" + this.path;
 			try {
@@ -93,14 +104,19 @@ public class Response {
 		return contentType;
 	}
 
+	// Returns the header response as a string
 	public String toString() {
 		String str = "";
 		str += protocol + " " + error;
 
+		// Format the header for a 200
 		if (error == 200) {
 			str += " OK\r\n";
 			str += "Content-Type: " + contentType + "\r\n";
 			str += "Date: " + date + "\r\n\r\n";
+		
+		// Format the header for a redirect
+		// https://en.wikipedia.org/wiki/HTTP_301#Example
 		} else if (error == 301) {
 			str += " Moved Permanently\r\n";
 			str += "Location: " + this.path;
