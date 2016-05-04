@@ -7,35 +7,37 @@ import java.util.*;
 import java.text.SimpleDateFormat;
 
 public class Response {
+	private String path;
+	private String method;
 	private String protocol = "HTTP/1.1";
 	private int error;
 	private String contentType;
 	private String date;
 	private SimpleDateFormat dateFormat;
-	private String path;
 	private byte[] file;
 
 	//OMAR's TODO TRY/CATCH ERRORSTATUS METHOD SIGNATURE 
 
+	// Constructor
 	public Response(String path, String method) throws IOException {
 		this.path = path;
+		this.method = method;
 		contentType = "text/html";
 
-		if (method.equalsIgnoreCase("GET")) {
-			try {
-				// Read the file into a byte stream
-				// http://stackoverflow.com/questions/858980/file-to-byte-in-java
-				Path nioPath = Paths.get(path);
-				System.out.println(1);
-				this.file = Files.readAllBytes(nioPath);
-				System.out.println(2);
-				this.contentType = interpretContentType();
-				System.out.println(3);
+		try {
+			// Read the file into a byte stream
+			// http://stackoverflow.com/questions/858980/file-to-byte-in-java
+			Path nioPath = Paths.get(path);
+			System.out.println(1);
+			this.file = Files.readAllBytes(nioPath);
+			System.out.println(2);
+			this.contentType = interpretContentType();
+			System.out.println(3);
+			this.error = 200;
 
-			} catch (FileNotFoundException e) {
-				System.out.println("The requested file was not found" + e);
-				error = 404;
-			}	
+		} catch (Exception e) {
+			System.out.println("The requested file was not found: " + e);
+			error = 404;
 		}
 		
 		// Format the date appropriately
@@ -45,8 +47,21 @@ public class Response {
 		this.date = dateFormat.format(Calendar.getInstance().getTime());
 	}
 	
+	// Methods
+	public String getMethod() {
+		return method;
+	}
+
 	public byte[] getFile() {
 		return file;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public int getError() {
+		return error;
 	}
 
 	public String interpretContentType() {

@@ -103,7 +103,7 @@ public class SimpleWebServer {
 
 					// Write the response and the file to the client
 					webServer.toClientStream.writeBytes(response.toString());
-					if (response.getMethod.equalsIgnoreCase("GET")
+					if (response.getMethod().equalsIgnoreCase("GET") && response.getError() == 200)
 						webServer.toClientStream.write(response.getFile(), 0, response.getFile().length);
 					
 					// Close the I/O streams
