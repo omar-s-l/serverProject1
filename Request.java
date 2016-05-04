@@ -1,10 +1,9 @@
 import java.util.ArrayList;
 
 public class Request { 
-	
+	// Path and opcode variables
+	private String path;
 	private String method;
-	private String path; 
-	//private ArrayList<ArrayList<String>> lines;
 
 	// Constructor
 	Request(ArrayList<ArrayList<String>> lines) {
@@ -13,6 +12,7 @@ public class Request {
 	}
 
 	// Methods
+	// Getter methods
 	public String getMethod(){
 		return this.method;
 	}

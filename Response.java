@@ -6,6 +6,7 @@ import java.util.*;
 import java.text.SimpleDateFormat;
 
 public class Response {
+	// Path and opcode variables
 	private String path;
 	private String method;
 
@@ -23,10 +24,15 @@ public class Response {
 	public Response(String path, String method) throws IOException {
 		this.path = path;
 		this.method = method;
-		contentType = "text/html";
+		this.contentType = "text/html";
 
+		// Acquire the singleton as a local variable for ease of use
 		RedirectMap redirects = RedirectMap.getInstance();
 
+		/* The following logic is used to set the correct error value
+		 * and to extract the requested file as a byte[] (if applicable)
+		 * to be sent to the client's output stream
+		 */
 		// If the client sends a POST request, throw a 403
 		if (!method.equalsIgnoreCase("HEAD") && !method.equalsIgnoreCase("GET")) {
 			error = 403;
@@ -57,20 +63,24 @@ public class Response {
 				System.out.println(3);
 				this.error = 200;
 
-			} catch (Exception e) {
+			} catch (FileNotFoundException e) {
 				System.out.println("The requested file was not found: " + e);
+				error = 404;
+			} catch (IOException e) {
+				System.out.println("Exception: " + e);
 				error = 404;
 			}
 		}
 		
 		// Format the date appropriately
 		// http://stackoverflow.com/questions/7707555/getting-date-in-http-format-in-java
-		dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
-		dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+		this.dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+		this.dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 		this.date = dateFormat.format(Calendar.getInstance().getTime());
 	}
 	
 	// Methods
+	// Getter methods
 	public String getMethod() {
 		return method;
 	}
@@ -87,6 +97,7 @@ public class Response {
 		return error;
 	}
 
+	// Interprets the end of the path variable to figure out what MIME type to use
 	public String interpretContentType() {
 		if (path.endsWith(".html"))
 			this.contentType = "text/html";
@@ -102,7 +113,8 @@ public class Response {
 		return contentType;
 	}
 
-	// Returns the header response as a string
+	// Returns the header response as a string, which
+	// can then be sent to the client's output stream
 	public String toString() {
 		String str = "";
 		str += protocol + " " + error;
