@@ -29,13 +29,13 @@ public class Response {
 		RedirectMap redirects = RedirectMap.getInstance();
 
 		// If the client sends a POST request, throw a 403
-		if (method.equalsIgnoreCase("POST")) {
+		if (!method.equalsIgnoreCase("HEAD") && !method.equalsIgnoreCase("GET")) {
 			error = 403;
 
 		// If the client asks for the redirect.defs file, throw a 404
 		} else if (path.endsWith("redirect.defs")) {
 			error = 404;
-		
+
 		// If the client asks for a location that has been moved, throw a 301,
 		// search the map in the RedirectMap singleton for the key, and serve
 		// the client the value as the new location
