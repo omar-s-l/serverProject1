@@ -11,7 +11,7 @@ public class Request {
 	// Constructor
 	Request(ArrayList<ArrayList<String>> lines) {
 		this.method = lines.get(0).get(0);
-		this.path = "www" + lines.get(0).get(1);
+		this.path = lines.get(0).get(1);
 	}
 
 	// Methods

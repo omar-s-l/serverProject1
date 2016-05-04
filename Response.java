@@ -9,14 +9,17 @@ import java.text.SimpleDateFormat;
 public class Response {
 	private String path;
 	private String method;
+
+	// Reponse content variables
 	private String protocol = "HTTP/1.1";
 	private int error;
 	private String contentType;
-	private String date;
-	private SimpleDateFormat dateFormat;
 	private byte[] file;
 
-	//OMAR's TODO TRY/CATCH ERRORSTATUS METHOD SIGNATURE 
+	// Date variables
+	private String date;
+	private SimpleDateFormat dateFormat;
+	
 
 	// Constructor
 	public Response(String path, String method) throws IOException {
@@ -24,20 +27,31 @@ public class Response {
 		this.method = method;
 		contentType = "text/html";
 
-		try {
-			// Read the file into a byte stream
-			// http://stackoverflow.com/questions/858980/file-to-byte-in-java
-			Path nioPath = Paths.get(path);
-			System.out.println(1);
-			this.file = Files.readAllBytes(nioPath);
-			System.out.println(2);
-			this.contentType = interpretContentType();
-			System.out.println(3);
-			this.error = 200;
+		RedirectMap redirects = RedirectMap.getInstance();
 
-		} catch (Exception e) {
-			System.out.println("The requested file was not found: " + e);
+		if (path.endsWith("redirect.defs")) {
 			error = 404;
+		} else if (redirects.getMap().containsKey(this.path)) {
+			System.out.println("I know how to redirect that!");
+			error = 301;
+			this.path = redirects.getMap().get(this.path);
+		} else {
+			this.path = "www" + this.path;
+			try {
+				// Read the file into a byte stream
+				// http://stackoverflow.com/questions/858980/file-to-byte-in-java
+				Path nioPath = Paths.get(this.path);
+				System.out.println(1);
+				this.file = Files.readAllBytes(nioPath);
+				System.out.println(2);
+				this.contentType = interpretContentType();
+				System.out.println(3);
+				this.error = 200;
+
+			} catch (Exception e) {
+				System.out.println("The requested file was not found: " + e);
+				error = 404;
+			}
 		}
 		
 		// Format the date appropriately
@@ -81,10 +95,16 @@ public class Response {
 
 	public String toString() {
 		String str = "";
+		str += protocol + " " + error;
 
-		str += protocol + " " + error + " OK\r\n";
-		str += "Content-Type: " + contentType + "\r\n";
-		str += "Date: " + date + "\r\n\r\n";
+		if (error == 200) {
+			str += " OK\r\n";
+			str += "Content-Type: " + contentType + "\r\n";
+			str += "Date: " + date + "\r\n\r\n";
+		} else if (error == 301) {
+			str += " Moved Permanently\r\n";
+			str += "Location: " + this.path;
+		}
 		
 		return str;
 	}
