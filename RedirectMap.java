@@ -19,8 +19,6 @@ public class RedirectMap {
 		} catch (Exception e) {
 			System.out.println("Exception: " + e);
 		}
-		System.out.println("redirectMap:");
-		System.out.println(redirectMap);
 	}
 
 	public static RedirectMap getInstance() {
