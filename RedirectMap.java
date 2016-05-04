@@ -16,6 +16,7 @@ public class RedirectMap {
             	String[] split = line.split("\\s+");
             	redirectMap.put(split[0], split[1]);
             }
+            input.close();
 		} catch (Exception e) {
 			System.out.println("Exception: " + e);
 		}

@@ -1,5 +1,4 @@
 import java.io.*;
-import java.net.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
@@ -10,7 +9,7 @@ public class Response {
 	private String path;
 	private String method;
 
-	// Reponse content variables
+	// Response content variables
 	private String protocol = "HTTP/1.1";
 	private int error;
 	private String contentType;
@@ -112,15 +111,18 @@ public class Response {
 		// Format the header for a 200
 		if (error == 200) {
 			str += " OK\r\n";
-			str += "Content-Type: " + contentType + "\r\n";
-			str += "Date: " + date + "\r\n\r\n";
 		
 		// Format the header for a redirect
 		// https://en.wikipedia.org/wiki/HTTP_301#Example
 		} else if (error == 301) {
 			str += " Moved Permanently\r\n";
-			str += "Location: " + this.path;
+			str += "Location: " + this.path + "\r\n";
+		} else {
+			str += "\r\n";
 		}
+
+		str += "Content-Type: " + contentType + "\r\n";
+		str += "Date: " + date + "\r\n\r\n";
 		
 		return str;
 	}
