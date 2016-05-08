@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 // Attributions: Several of these methods were taken from instructor solutions to Project0
-public class SimpleWebServer {
+class SimpleWebServer {
 	private final int serverPort;
 	private ServerSocket socket;
 	private DataOutputStream toClientStream;

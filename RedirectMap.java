@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class RedirectMap {
+class RedirectMap {
 	private static RedirectMap instance = null;
 	private HashMap<String, String> redirectMap;
 

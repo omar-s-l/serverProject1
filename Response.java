@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.text.SimpleDateFormat;
 
-public class Response {
+class Response {
 	// Path and opcode variables
 	private String path;
 	private String method;

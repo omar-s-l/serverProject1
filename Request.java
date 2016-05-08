@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Request { 
+class Request { 
 	// Path and opcode variables
 	private String path;
 	private String method;
